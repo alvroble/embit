@@ -16,18 +16,18 @@ from binascii import hexlify
 
 def main():
     # Test shares from the test vectors
-    '''slip39_shares = [
+    slip39_shares = [
         "shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed",
         "shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking",
-    ]'''
+    ]
 
-    slip39_shares = [
+    '''slip39_shares = [
       "wildlife deal ceramic round aluminum pitch goat racism employer miracle percent math decision episode dramatic editor lily prospect program scene rebuild display sympathy have single mustang junction relate often chemical society wits estate",
       "wildlife deal decision scared acne fatal snake paces obtain election dryer dominant romp tactics railroad marvel trust helpful flip peanut theory theater photo luck install entrance taxi step oven network dictate intimate listen",
       "wildlife deal ceramic scatter argue equip vampire together ruin reject literary rival distance aquatic agency teammate rebound false argue miracle stay again blessing peaceful unknown cover beard acid island language debris industry idle",
       "wildlife deal ceramic snake agree voter main lecture axis kitchen physics arcade velvet spine idea scroll promise platform firm sharp patrol divorce ancestor fantasy forbid goat ajar believe swimming cowboy symbolic plastic spelling",
       "wildlife deal decision shadow analysis adjust bulb skunk muscle mandate obesity total guitar coal gravity carve slim jacket ruin rebuild ancestor numerous hour mortgage require herd maiden public ceiling pecan pickup shadow club"
-    ]
+    ]'''
     
     # Passphrase used in the test vectors
     passphrase = b"TREZOR"
@@ -90,7 +90,21 @@ def main():
         print(f"Recovery successful: {hexlify(recovered_secret).decode() == expected_hex}")
         
 
+        # BSLIP-39 to BIP-32
+        print("\n\n*********************************")
+        print("******* SLIP-39 to BIP-32 *******")
+        print("*********************************\n\n")
         
+        xprv = "xprv9s21ZrQH143K2nNuAbfWPHBtfiSCS14XQgb3otW4pX655q58EEZeC8zmjEUwucBu9dPnxdpbZLCn57yx45RBkwJHnwHFjZK4XPJ8SyeYjYg"
+        root_key_raw = HDKey.from_string(xprv)
+        fingerprint_raw = hexlify(root_key_raw.my_fingerprint)
+        secret = root_key_raw.secret
+        print(fingerprint_raw)
+        print(hexlify(root_key_raw.secret))
+
+        share_list = ShareSet.split_secret(secret,1,1)
+        print(ShareSet(share_list).shares)
+
 
 
     except Exception as e:
